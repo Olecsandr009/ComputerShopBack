@@ -9,7 +9,7 @@ import {
   ProductEntity,
 } from 'src/product/product.entity';
 import { SubCategoryEntity } from 'src/sub-category/sub-category.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, ILike, Repository } from 'typeorm';
 import { createProductDTO } from './dto/create-product.dto';
 
 @Injectable()
@@ -40,13 +40,13 @@ export class ProductService {
     return await this.productRepository.findOne({ where: { slug } });
   }
 
-  async searchMany(searchTerm: string) {
-    return await this.productRepository
-      .createQueryBuilder('product')
-      .where('LOWER(product.model) LIKE LOWER(:searchTerm)', {
-        searchTerm: `%${searchTerm}%`,
-      })
-      .getMany();
+  async searchProducts(searchTerm: string) {
+    return await this.productRepository.find({
+      where: [
+        { model: ILike(`%${searchTerm}%`) },
+        { description: ILike(`%${searchTerm}%`) },
+      ],
+    });
   }
 
   async createProduct(productData: createProductDTO) {

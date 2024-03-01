@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, ILike, Repository } from 'typeorm';
 import { CategoryDTO } from './category.dto';
 import { CategoryEntity } from './category.entity';
 
@@ -27,13 +27,10 @@ export class CategoryService {
     });
   }
 
-  async searchMany(searchTerm: string) {
-    return await this.categoryRepository
-      .createQueryBuilder('category')
-      .where('LOWER(category.name) LIKE LOWER(:searchTerm)', {
-        searchTerm: `%${searchTerm}%`,
-      })
-      .getMany();
+  async searchCategories(searchTerm: string) {
+    return await this.categoryRepository.find({
+      where: { name: ILike(`%${searchTerm}%`) },
+    });
   }
 
   async findChildrenByName(name: string) {

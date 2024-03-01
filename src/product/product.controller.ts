@@ -30,7 +30,7 @@ export class ProductController {
 
   @Get('search/:searchTerm')
   async searchProduct(@Param('searchTerm') searchTerm: string) {
-    return this.productService.searchMany(searchTerm);
+    return this.productService.searchProducts(searchTerm);
   }
 
   @Get('/:slug')

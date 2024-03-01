@@ -28,7 +28,7 @@ export class CategoryController {
 
   @Get('search/:searchTerm')
   async searchProduct(@Param('searchTerm') searchTerm: string) {
-    return this.categoryService.searchMany(searchTerm);
+    return this.categoryService.searchCategories(searchTerm);
   }
 
   @Get('/:categoryName')
